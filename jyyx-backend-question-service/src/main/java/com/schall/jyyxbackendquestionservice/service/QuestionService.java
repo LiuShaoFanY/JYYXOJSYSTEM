@@ -3,8 +3,10 @@ package com.schall.jyyxbackendquestionservice.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.schall.jyyx.model.dto.Ranking.RankingQueryRequest;
 import com.schall.jyyx.model.dto.question.QuestionQueryRequest;
 import com.schall.jyyx.model.entity.Question;
+import com.schall.jyyx.model.entity.Ranking;
 import com.schall.jyyx.model.vo.QuestionVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +70,15 @@ public interface QuestionService extends IService<Question> {
      * @return 是否更新成功
      */
     boolean updateAcceptedNum(long questionId, int increment);
+
+    /**
+     * 查询排行榜
+     *
+     * @param rankingQueryRequest 排行榜查询请求
+     * @return 分页的排行榜数据
+     */
+    Page<Ranking> listRankingByPage(RankingQueryRequest rankingQueryRequest);
+
 
     /**
      * 更新个性化反馈和教学指导。

@@ -1,4 +1,4 @@
-package com.schall.jyyxbackendgateway.config;
+package com.schall.jyyxbackenduserservice.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,31 +45,19 @@ public class CorsConfig {
 
             // 允许的域名（开发环境和生产环境）
             List<String> allowedOrigins = Arrays.asList(
-                    "http://localhost:8101", // 开发环境
-                    "http://www.jyyxojsystem.top:8101", // 生产环境
-                    "http://localhost:8080" // 生产环境（前端端口）
+                    "http://localhost:8080", // 开发环境
+                    "http://www.jyyxojsystem.top:8077", // 生产环境
+                    "https://www.jyyxojsystem.top:8077" // 支持 HTTPS
             );
             config.setAllowedOriginPatterns(allowedOrigins);
             logger.debug("允许的域名：{}", config.getAllowedOriginPatterns());
 
             // 允许的请求头
-            config.setAllowedHeaders(Arrays.asList(
-                    "Authorization",
-                    "Cache-Control",
-                    "Content-Type",
-                    "X-Requested-With",
-                    "Origin",
-                    "Accept"
-            ));
+            config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type", "X-Requested-With"));
             logger.debug("允许的请求头：{}", config.getAllowedHeaders());
 
             // 暴露的响应头
-            config.setExposedHeaders(Arrays.asList(
-                    "Authorization",
-                    "Cache-Control",
-                    "Content-Type",
-                    "Set-Cookie" // 允许前端访问 Set-Cookie 头
-            ));
+            config.setExposedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
             logger.debug("暴露的响应头：{}", config.getExposedHeaders());
 
             // 预检请求的缓存时间（单位：秒）

@@ -15,7 +15,7 @@ public class JudgeInnerController implements JudgeFeignClient {
     @Resource
     private JudgeService judgeService;
     /**
-     * 判题
+     * 评测
      * @param questionSubmitId
      * @return
      */

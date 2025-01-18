@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
+import com.schall.jyyx.model.dto.Ranking.RankingQueryRequest;
 import com.schall.jyyx.model.dto.question.JudgeCase;
 import com.schall.jyyx.model.dto.question.JudgeConfig;
 import com.schall.jyyx.model.dto.question.QuestionAddRequest;
@@ -14,6 +15,7 @@ import com.schall.jyyx.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.schall.jyyx.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.schall.jyyx.model.entity.Question;
 import com.schall.jyyx.model.entity.QuestionSubmit;
+import com.schall.jyyx.model.entity.Ranking;
 import com.schall.jyyx.model.entity.User;
 import com.schall.jyyx.model.enums.UserRoleEnum;
 import com.schall.jyyx.model.vo.QuestionSubmitVO;
@@ -390,4 +392,21 @@ public class QuestionController {
             return ResultUtils.error(ErrorCode.SYSTEM_ERROR);
         }
     }
+    /**
+     * 分页获取排行榜数据
+     *
+     * @param rankingQueryRequest 排行榜查询请求
+     * @param request             HTTP请求
+     * @return 分页的排行榜数据
+     */
+    @PostMapping("/ranking/list/page")
+    public BaseResponse<Page<Ranking>> listRankingByPage(@RequestBody RankingQueryRequest rankingQueryRequest, HttpServletRequest request) {
+        if (rankingQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
+        }
+        // 调用服务层查询排行榜数据
+        Page<Ranking> rankingPage = questionService.listRankingByPage(rankingQueryRequest);
+        return ResultUtils.success(rankingPage);
+    }
+
 }

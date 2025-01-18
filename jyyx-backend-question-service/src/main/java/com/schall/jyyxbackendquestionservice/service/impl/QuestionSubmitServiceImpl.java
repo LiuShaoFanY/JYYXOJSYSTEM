@@ -98,7 +98,7 @@ public class QuestionSubmitServiceImpl
             try {
                 this.judgeFeignClient.doJudge(questionSubmitId);
             } catch (Exception e) {
-                log.error("判题服务调用失败，questionSubmitId: {}", questionSubmitId, e);
+                log.error("评测服务调用失败，questionSubmitId: {}", questionSubmitId, e);
             }
         });
         this.questionService.updateSubmitNum(questionId, 1);
@@ -217,4 +217,6 @@ public class QuestionSubmitServiceImpl
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "获取教学指导失败");
         }
     }
+
+
 }

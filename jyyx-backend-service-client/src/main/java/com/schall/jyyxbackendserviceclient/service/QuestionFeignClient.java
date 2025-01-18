@@ -62,15 +62,14 @@ public interface QuestionFeignClient {
     String getAnalysisData(@RequestParam("questionSubmitId") long questionSubmitId);
 
     /**
-     * 更新题目的通过次数
+     * 更新题目通过数
      *
-     * @param questionId 题目ID
-     * @param increment  增量
+     * @param questionSubmitId 题目提交ID
+     * @param increment        增加的通过数
      * @return 是否更新成功
      */
-    @PostMapping("/question/updateAcceptedNum")
-    boolean updateAcceptedNum(@RequestParam("questionId") long questionId, @RequestParam("increment") int increment);
-
+    @PostMapping("/question_submit/updateAcceptedNum")
+    boolean updateAcceptedNum(@RequestParam("questionSubmitId") long questionSubmitId, @RequestParam("increment") int increment);
     /**
      * 更新题目提交的个性化反馈和教学指导
      *

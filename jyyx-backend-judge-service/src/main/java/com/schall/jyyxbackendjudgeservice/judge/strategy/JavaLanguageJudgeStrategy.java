@@ -9,11 +9,11 @@
 //import java.util.Optional;
 //
 ///**
-// * TODO Java程序的判题策略
+// * TODO Java程序的评测策略
 // */
 //public class JavaLanguageJudgeStrategy implements com.schall.jyyxbackendjudgeservice.judge.strategy.JudgeStrategy {
 //    /**
-//     * TODO 执行判题
+//     * TODO 执行评测
 //     * @param judgeContext
 //     * @return
 //     */

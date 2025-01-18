@@ -52,6 +52,16 @@ public interface QuestionSubmitMapper extends BaseMapper<QuestionSubmit> {
     @Select("SELECT teachingGuidance FROM question_submit WHERE id = #{questionSubmitId}")
     String getTeachingGuidance(@Param("questionSubmitId") long questionSubmitId);
 
+    /**
+     * 更新题目通过数
+     *
+     * @param questionSubmitId 题目提交ID
+     * @param increment        增加的通过数
+     * @return 是否更新成功
+     */
+    @Update("UPDATE question_submit SET acceptedNum = acceptedNum + #{increment} WHERE id = #{questionSubmitId}")
+    boolean updateAcceptedNum(@Param("questionSubmitId") long questionSubmitId, @Param("increment") int increment);
+
 }
 
 

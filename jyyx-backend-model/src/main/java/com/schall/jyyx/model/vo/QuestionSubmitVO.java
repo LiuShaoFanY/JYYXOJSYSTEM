@@ -31,12 +31,12 @@ public class QuestionSubmitVO implements Serializable {
     private String code;
 
     /**
-     * 判题信息
+     * 评测信息
      */
     private JudgeInfo judgeInfo;
 
     /**
-     * 判题状态 (0 - 待判题,1 - 判题中,2 - 成功,3 - 失败)
+     * 评测状态 (0 - 待评测,1 - 评测中,2 - 成功,3 - 失败)
      */
     private Integer status;
 

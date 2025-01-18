@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
  * 用户提交枚举
  */
 public enum QuestionSubmitStatusEnum {
-    // todo '判题状态 (0 - 待判题,1 - 判题中,2 - 成功,3 - 失败)'
+    // todo '评测状态 (0 - 待评测,1 - 评测中,2 - 成功,3 - 失败)'
     WAITING("等待中", 0),
-    RUNNING("判题中", 1),
+    RUNNING("评测中", 1),
     SUCCEED("成功", 2),
     FAILED("失败",3);
 

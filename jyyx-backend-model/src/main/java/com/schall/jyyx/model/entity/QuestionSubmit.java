@@ -36,12 +36,12 @@ public class QuestionSubmit implements Serializable {
     private String code;
 
     /**
-     * 判题信息(json 对象)
+     * 评测信息(json 对象)
      */
     private String judgeInfo;
 
     /**
-     * 判题状态 (0 - 待判题,1 - 判题中,2 - 成功,3 - 失败)
+     * 评测状态 (0 - 待评测,1 - 评测中,2 - 成功,3 - 失败)
      */
     private Integer status;
 
@@ -65,6 +65,7 @@ public class QuestionSubmit implements Serializable {
      */
     private Date updateTime;
 
+    private Integer acceptedNum; // 新增字段
     /**
      * 是否删除
      */

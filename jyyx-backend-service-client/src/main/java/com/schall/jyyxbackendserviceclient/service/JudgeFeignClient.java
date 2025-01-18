@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 /**
- * 判题服务
+ * 评测服务
  */
 @FeignClient(name = "jyyx-backend-judge-service" , path = "/api/judge/inner")
 public interface JudgeFeignClient {
     /**
-     * 判题
+     * 评测
      * @param questionSubmitId
      * @return
      */

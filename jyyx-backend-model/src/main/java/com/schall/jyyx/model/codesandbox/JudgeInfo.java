@@ -3,7 +3,7 @@ package com.schall.jyyx.model.codesandbox;
 import lombok.Data;
 
 /**
- * 判题信息
+ * 评测信息
  */
 @Data
 public class JudgeInfo {
@@ -24,4 +24,6 @@ public class JudgeInfo {
      * 消耗时间(kb)
      */
     private Long time;
+
+    private Integer status; // 评测状态
 }

@@ -1,6 +1,8 @@
 server:
   port: 8101
 spring:
+  profiles:
+    active: prod
   cloud:
     nacos:
       discovery:
@@ -40,4 +42,6 @@ knife4j:
       # ④ 第四行配置，聚合子服务全部为Swagger2规范的文档
       version: swagger2
 
-
+logging:
+  level:
+    com.schall.jyyxbackendgateway.config: DEBUG

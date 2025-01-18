@@ -4,12 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import com.schall.jyyx.model.dto.Ranking.RankingQueryRequest;
 import com.schall.jyyx.model.dto.question.QuestionQueryRequest;
 import com.schall.jyyx.model.entity.Question;
+import com.schall.jyyx.model.entity.QuestionSubmit;
+import com.schall.jyyx.model.entity.Ranking;
 import com.schall.jyyx.model.entity.User;
+import com.schall.jyyx.model.enums.QuestionSubmitStatusEnum;
 import com.schall.jyyx.model.vo.QuestionVO;
 import com.schall.jyyx.model.vo.UserVO;
 import com.schall.jyyxbackendquestionservice.mapper.QuestionMapper;
+import com.schall.jyyxbackendquestionservice.mapper.QuestionSubmitMapper;
 import com.schall.jyyxbackendquestionservice.service.QuestionService;
 import com.schall.jyyxbackendserviceclient.service.UserFeignClient;
 import com.schall.jyyxblackendcommon.common.ErrorCode;
@@ -35,6 +40,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Resource
     private UserFeignClient userFeignClient;
 
+    @Resource
+    private QuestionSubmitMapper questionSubmitMapper;
+
     public QuestionServiceImpl() {
     }
 
@@ -57,9 +65,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             } else if (StringUtils.isNotBlank(content) && answer.length() > 8192) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "内容过长");
             } else if (StringUtils.isNotBlank(judgeCase) && judgeCase.length() > 8192) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "判题用例过长");
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "评测用例过长");
             } else if (StringUtils.isNotBlank(judgeConfig) && judgeConfig.length() > 8192) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "判题配置过长");
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "评测配置过长");
             }
         }
     }
@@ -180,5 +188,43 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "反馈和指导存储失败");
         }
+    }
+
+    @Override
+    public Page<Ranking> listRankingByPage(RankingQueryRequest rankingQueryRequest) {
+        long current = rankingQueryRequest.getCurrent();
+        long size = rankingQueryRequest.getPageSize();
+        String sortField = rankingQueryRequest.getSortField();
+        String sortOrder = rankingQueryRequest.getSortOrder();
+
+        // 查询所有用户的通过次数
+        QueryWrapper<QuestionSubmit> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("user_id, COUNT(*) as acceptedNum")
+                .eq("status", QuestionSubmitStatusEnum.SUCCEED.getValue())
+                .groupBy("user_id")
+                .orderBy(true, "desc".equals(sortOrder), sortField);
+
+        // 分页查询
+        Page<QuestionSubmit> questionSubmitPage = questionSubmitMapper.selectPage(new Page<>(current, size), queryWrapper);
+
+        // 转换为 Ranking 对象
+        List<Ranking> rankingList = questionSubmitPage.getRecords().stream().map(questionSubmit -> {
+            Ranking ranking = new Ranking();
+            ranking.setUserId(questionSubmit.getUser_id());
+
+            // 获取用户信息
+            User user = userFeignClient.getById(questionSubmit.getUser_id());
+            if (user != null) {
+                ranking.setUserName(user.getUserName());
+            }
+
+            ranking.setAcceptedNum(questionSubmit.getAcceptedNum()); // 使用 acceptedNum 字段
+            return ranking;
+        }).collect(Collectors.toList());
+
+        // 构建分页结果
+        Page<Ranking> rankingPage = new Page<>(current, size, questionSubmitPage.getTotal());
+        rankingPage.setRecords(rankingList);
+        return rankingPage;
     }
 }

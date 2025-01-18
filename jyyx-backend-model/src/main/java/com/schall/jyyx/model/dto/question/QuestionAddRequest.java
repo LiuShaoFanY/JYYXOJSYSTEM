@@ -32,12 +32,12 @@ public class QuestionAddRequest implements Serializable {
     private String answer;
 
     /**
-     * 判题用例
+     * 评测用例
      */
     private List<JudgeCase> judgeCase;
 
     /**
-     * 判题配置
+     * 评测配置
      */
     private JudgeConfig judgeConfig;
 

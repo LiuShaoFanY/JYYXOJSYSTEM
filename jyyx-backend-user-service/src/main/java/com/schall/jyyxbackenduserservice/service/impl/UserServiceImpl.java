@@ -74,6 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
             } else {
                 LoginUserVO loginUserVO = new LoginUserVO();
+                loginUserVO.setUser_id(user.getId()); // 设置 user_id
                 loginUserVO.setUserName(user.getUserName());
                 loginUserVO.setUserRole(user.getUserRole());
                 request.getSession().setAttribute(USER_LOGIN_STATE, user);
@@ -108,8 +109,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return loginUserVO;
     }
 
+//    @Override
+//    public LoginUserVO administratorLogin(String userAccount, String userPassword, HttpServletRequest request) {
+//        LoginUserVO loginUserVO = userLogin(userAccount, userPassword, request);
+//
+//        // 检查用户角色是否为管理员
+//        if (!UserRoleEnum.ADMINISTRATOR.getValue().equals(loginUserVO.getUserRole())) {
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "不是超级管理员");
+//        }
+//
+//        return loginUserVO;
+//    }
+
     @Override
     public LoginUserVO administratorLogin(String userAccount, String userPassword, HttpServletRequest request) {
+        // 调用通用的用户登录方法
         LoginUserVO loginUserVO = userLogin(userAccount, userPassword, request);
 
         // 检查用户角色是否为管理员
@@ -117,8 +131,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "不是超级管理员");
         }
 
+        // 获取登录用户信息
+        User user = getLoginUser(request);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "用户未登录");
+        }
+
+        // 设置 user_id
+        loginUserVO.setUser_id(user.getId());
+
+        // 进一步验证管理员信息
+        Administrator administrator = administratorService.getAdministratorByUserId(user.getId());
+        if (administrator == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "管理员信息不存在");
+        }
+
+        // 将管理员信息设置到登录用户VO中
+        loginUserVO.setDepartment(administrator.getDepartment()); // 设置管理部门
+        loginUserVO.setUserAccount(administrator.getUserAccount()); // 设置账号
+        loginUserVO.setUserName(administrator.getUserName()); // 设置用户昵称
+        System.out.println("管理员信息：" + administrator);
+
         return loginUserVO;
     }
+
 
     @Override
     public User getLoginUser(HttpServletRequest request) {

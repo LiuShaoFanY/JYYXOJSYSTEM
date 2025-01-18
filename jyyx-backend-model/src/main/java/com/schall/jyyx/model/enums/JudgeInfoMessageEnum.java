@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * todo 判题信息消息枚举
+ * todo 评测信息消息枚举
  */
 public enum JudgeInfoMessageEnum {
 

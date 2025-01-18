@@ -8,11 +8,11 @@
 //
 //import java.util.List;
 ///**
-// * TODO 默认判题策略
+// * TODO 默认评测策略
 // */
 //public class DefaultJudgeStrategy implements com.schall.jyyxbackendjudgeservice.judge.strategy.JudgeStrategy{
 //    /**
-//     * TODO 执行判题
+//     * TODO 执行评测
 //     * @param judgeContext
 //     * @return
 //     */

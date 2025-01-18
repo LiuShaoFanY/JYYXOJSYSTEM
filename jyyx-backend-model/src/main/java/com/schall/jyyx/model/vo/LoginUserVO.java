@@ -60,10 +60,12 @@ import lombok.Setter;
 @Data
 public class LoginUserVO {
     private Long id;
+    private Long user_id;
     private String userAccount;
     private String userName;
     private String userRole;
     private String title; // 教师职称
+
     // 添加 setDepartment 方法
     @Setter
     private String department; // 教师所属部门

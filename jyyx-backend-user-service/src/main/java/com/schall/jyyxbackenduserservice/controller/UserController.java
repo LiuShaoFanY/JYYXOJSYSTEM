@@ -3,18 +3,12 @@ package com.schall.jyyxbackenduserservice.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.schall.jyyx.model.dto.user.*;
-import com.schall.jyyx.model.entity.Administrator;
-import com.schall.jyyx.model.entity.Student;
-import com.schall.jyyx.model.entity.Teacher;
-import com.schall.jyyx.model.entity.User;
+import com.schall.jyyx.model.entity.*;
 import com.schall.jyyx.model.vo.ExtendedUserVO;
 import com.schall.jyyx.model.vo.LoginUserVO;
 import com.schall.jyyx.model.vo.UserVO;
 import com.schall.jyyxbackenduserservice.mapper.TeacherMapper;
-import com.schall.jyyxbackenduserservice.service.AdministratorService;
-import com.schall.jyyxbackenduserservice.service.StudentService;
-import com.schall.jyyxbackenduserservice.service.TeacherService;
-import com.schall.jyyxbackenduserservice.service.UserService;
+import com.schall.jyyxbackenduserservice.service.*;
 import com.schall.jyyxblackendcommon.annotation.AuthCheck;
 import com.schall.jyyxblackendcommon.common.BaseResponse;
 import com.schall.jyyxblackendcommon.common.DeleteRequest;
@@ -53,6 +47,10 @@ public class UserController {
     private AdministratorService administratorService;
     @Resource
     private TeacherMapper teacherMapper;
+
+
+    @Resource
+    private AnnouncementService announcementService; // 注入公告服务
     // region 教师相关接口
 
     /**
@@ -222,17 +220,21 @@ public class UserController {
         String userAccount = userLoginRequest.getUserAccount();
         String userPassword = userLoginRequest.getUserPassword();
 
+
+
         // 检查账号和密码是否为空
         if (userAccount == null || userPassword == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号或密码为空");
         }
 
         // 调用 userService 进行超级管理员登录
-        LoginUserVO loginUserVO = userService.administratorLogin(userAccount, userPassword, request);
+        LoginUserVO loginUserVO = userService.administratorLogin(userAccount, userPassword,request);
+
 
         // 返回成功结果
         return ResultUtils.success(loginUserVO);
     }
+
     /**
      * 根据 user_id 获取管理员信息
      *
@@ -743,6 +745,68 @@ public class UserController {
                 .collect(Collectors.toList());
 
         return ResultUtils.success(userVOs);
+    }
+
+
+
+    // ==================== 公告相关接口 ====================
+
+    /**
+     * 添加公告
+     *
+     * @param announcement 公告信息
+     * @return 是否添加成功
+     */
+    @PostMapping("/announcement/add")
+    @AuthCheck(mustRole = {UserConstant.ADMINISTRATOR_ROLE, UserConstant.TEACHER_ROLE})
+    public BaseResponse<Boolean> addAnnouncement(@RequestBody Announcement announcement) {
+        if (announcement == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean result = announcementService.createAnnouncement(announcement);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 更新公告
+     *
+     * @param announcement 公告信息
+     * @return 是否更新成功
+     */
+    @PostMapping("/announcement/update")
+    @AuthCheck(mustRole = {UserConstant.ADMINISTRATOR_ROLE, UserConstant.TEACHER_ROLE})
+    public BaseResponse<Boolean> updateAnnouncement(@RequestBody Announcement announcement) {
+        if (announcement == null || announcement.getId() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean result = announcementService.updateAnnouncement(announcement);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 删除公告
+     *
+     * @param id 公告ID
+     * @return 是否删除成功
+     */
+    @DeleteMapping("/announcement/delete/{id}")
+    @AuthCheck(mustRole = {UserConstant.ADMINISTRATOR_ROLE, UserConstant.TEACHER_ROLE})
+    public BaseResponse<Boolean> deleteAnnouncement(@PathVariable Long id) {
+        if (id == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean result = announcementService.deleteAnnouncement(id);
+        return ResultUtils.success(result);
+    }
+    /**
+     * 获取公告列表
+     *
+     * @return 公告列表
+     */
+    @GetMapping("/announcement/list")
+    public BaseResponse<List<Announcement>> listAnnouncements() {
+        List<Announcement> announcements = announcementService.getAllAnnouncements();
+        return ResultUtils.success(announcements);
     }
 
 

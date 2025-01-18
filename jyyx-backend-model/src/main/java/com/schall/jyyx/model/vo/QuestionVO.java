@@ -58,12 +58,12 @@ public class QuestionVO implements Serializable {
 
     // todo 不允许返回给前端显示答案，防止if else
     /**
-     * 判题用例(json 数组)
+     * 评测用例(json 数组)
      */
     //private String judgeCase;
 
     /**
-     * 判题配置(json 对象)
+     * 评测配置(json 对象)
      */
     private JudgeConfig judgeConfig;
 

@@ -2,11 +2,11 @@ package com.schall.jyyxbackendjudgeservice.judge.strategy;
 import com.schall.jyyx.model.codesandbox.JudgeInfo;
 
 /**
- * 判题策略
+ * 评测策略
  */
 public interface  JudgeStrategy {
     /**
-     * TODO 执行判题
+     * TODO 执行评测
      * @param judgeContext
      * @return
      */

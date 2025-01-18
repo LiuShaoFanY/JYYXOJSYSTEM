@@ -8,12 +8,12 @@ import com.schall.jyyxbackendjudgeservice.judge.strategy.JudgeContext;
 import com.schall.jyyx.model.entity.QuestionSubmit;
 import org.springframework.stereotype.Service;
 /**
- * TODO 判题管理（简化调用）
+ * TODO 评测管理（简化调用）
  */
 @Service
 public class JudgeManger {
     /**
-     * TODO 执行判题
+     * TODO 执行评测
      * @param judgeContext
      * @return
      */
