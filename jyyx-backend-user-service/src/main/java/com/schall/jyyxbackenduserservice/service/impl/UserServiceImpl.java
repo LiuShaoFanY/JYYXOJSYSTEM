@@ -109,18 +109,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return loginUserVO;
     }
 
-//    @Override
-//    public LoginUserVO administratorLogin(String userAccount, String userPassword, HttpServletRequest request) {
-//        LoginUserVO loginUserVO = userLogin(userAccount, userPassword, request);
-//
-//        // 检查用户角色是否为管理员
-//        if (!UserRoleEnum.ADMINISTRATOR.getValue().equals(loginUserVO.getUserRole())) {
-//            throw new BusinessException(ErrorCode.PARAMS_ERROR, "不是超级管理员");
-//        }
-//
-//        return loginUserVO;
-//    }
-
     @Override
     public LoginUserVO administratorLogin(String userAccount, String userPassword, HttpServletRequest request) {
         // 调用通用的用户登录方法
@@ -156,11 +144,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
 
+    /**
+     * 获取当前登录的用户信息
+     *
+     * 此方法用于从HTTP请求的会话中获取当前登录的用户信息如果会话中没有用户信息，
+     * 则抛出一个商业异常，表明用户未登录
+     *
+     * @param request HttpServletRequest对象，用于获取会话中的用户信息
+     * @return User对象，表示当前登录的用户
+     * @throws BusinessException 如果会话中没有用户信息，抛出此异常
+     */
     @Override
     public User getLoginUser(HttpServletRequest request) {
         // 从 session 中获取用户对象
         User user = (User) request.getSession().getAttribute(USER_LOGIN_STATE);
         if (user == null) {
+            // 如果用户对象为null，表示用户未登录，抛出异常
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "用户未登录");
         }
         return user;

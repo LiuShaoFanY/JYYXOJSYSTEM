@@ -25,5 +25,4 @@ public class JudgeInfo {
      */
     private Long time;
 
-    private Integer status; // 评测状态
 }

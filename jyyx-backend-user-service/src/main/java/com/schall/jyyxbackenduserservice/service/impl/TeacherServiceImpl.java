@@ -32,7 +32,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         log.info("创建教师信息: user_id={}, teacherId={}, title={}, department={}", user_id, teacherId, title, department);
 
         // 校验
-        if (user_id == null || teacherId == null) {
+        if (user_id == null || teacherId == null || teacherId.isEmpty() ) {
             log.error("参数为空，user_id={}, teacherId={}", user_id, teacherId);
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }

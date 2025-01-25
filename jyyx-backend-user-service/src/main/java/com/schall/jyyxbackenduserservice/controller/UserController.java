@@ -345,13 +345,19 @@ public class UserController {
     @PostMapping("/add")
     @AuthCheck(mustRole = UserConstant.ADMINISTRATOR_ROLE)
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest, HttpServletRequest request) {
+        // 检查用户添加请求是否为空
         if (userAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        // 创建一个新的用户对象
         User user = new User();
+        // 将用户添加请求中的属性复制到用户对象中
         BeanUtils.copyProperties(userAddRequest, user);
+        // 保存用户对象
         boolean result = userService.save(user);
+        // 如果保存失败，抛出异常
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        // 返回成功响应，包含用户 ID
         return ResultUtils.success(user.getId());
     }
 
@@ -760,10 +766,13 @@ public class UserController {
     @PostMapping("/announcement/add")
     @AuthCheck(mustRole = {UserConstant.ADMINISTRATOR_ROLE, UserConstant.TEACHER_ROLE})
     public BaseResponse<Boolean> addAnnouncement(@RequestBody Announcement announcement) {
+        // 检查公告对象是否为空
         if (announcement == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        // 调用服务层方法创建公告
         boolean result = announcementService.createAnnouncement(announcement);
+        // 返回公告创建结果
         return ResultUtils.success(result);
     }
 

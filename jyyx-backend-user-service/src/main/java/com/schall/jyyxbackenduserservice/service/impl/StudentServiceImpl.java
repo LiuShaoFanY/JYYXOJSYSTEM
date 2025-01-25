@@ -33,7 +33,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         log.info("创建学生信息: user_id={}, studentId={}, grade={}, major={}", user_id, studentId, grade, major);
 
         // 校验
-        if (user_id == null || studentId == null) {
+        if (user_id == null || studentId == null || studentId.isEmpty() ) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
 

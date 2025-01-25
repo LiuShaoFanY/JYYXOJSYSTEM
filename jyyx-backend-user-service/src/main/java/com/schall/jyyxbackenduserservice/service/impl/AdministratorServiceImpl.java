@@ -27,11 +27,11 @@ public class AdministratorServiceImpl extends ServiceImpl<AdministratorMapper, A
         log.info("创建管理员信息: user_id={}, adminId={}, department={}", user_id, adminId, department);
 
         // 校验
-        if (user_id == null || adminId == null) {
+        if (user_id == null || adminId == null || adminId.isEmpty()) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
 
-        // 检查 adminId 是否已存在
+        // 检查 adminId 是否已存在9
         QueryWrapper<Administrator> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("adminId", adminId);
         if (this.getOne(queryWrapper) != null) {

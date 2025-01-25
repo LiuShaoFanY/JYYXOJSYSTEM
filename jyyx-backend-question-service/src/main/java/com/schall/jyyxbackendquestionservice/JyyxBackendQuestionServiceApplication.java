@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import com.schall.jyyxbackendquestionservice.rabbitmq.InitRabbitMq;
 
 @SpringBootApplication
 @MapperScan("com.schall.jyyxbackendquestionservice.mapper")
@@ -18,7 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class JyyxBackendQuestionServiceApplication {
 
     public static void main(String[] args) {
-
+        InitRabbitMq.doInit();
         SpringApplication.run(JyyxBackendQuestionServiceApplication.class, args);
     }
 
